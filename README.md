@@ -18,3 +18,7 @@ $ docker compose stop
 $ docker compose rm
 ```
 
+## Screenshot
+
+![screenshot](figs/screenshot.png)
+
