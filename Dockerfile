@@ -1,5 +1,9 @@
 FROM httpd
 
+ARG AW_TITLE="Autoware"
+ARG AW_GIT=https://github.com/autowarefoundation/autoware.git
+ARG AW_DIR=autoware
+
 ARG RCLCPP_TITLE="rclcpp - Galactic"
 ARG RCLCPP_GIT=https://github.com/ros2/rclcpp.git -b galactic
 ARG RCLCPP_DIR=rclcpp
@@ -17,7 +21,8 @@ RUN apt-get -y update && \
 # timezone setting
 ENV TZ=Asia/Tokyo
 
-RUN apt-get -y install git global
+RUN apt-get -y install git global python3-pip
+RUN pip install -U vcstool
 
 RUN sed -i 's/#LoadModule cgid_module modules/LoadModule cgid_module modules/g; \
             s/#AddHandler cgi-script/AddHandler cgi-script/g' \
@@ -43,5 +48,19 @@ RUN cd /usr/local/apache2/htdocs && \
     gtags && \
     htags --suggest2 -t "$CYCLONE_TITLE"
 
-RUN echo "<HTML><BODY><ul><li><a href=$RCLCPP_DIR/HTML>$RCLCPP_TITLE</a></li><li><a href=$CYCLONE_DIR/HTML>$CYCLONE_TITLE</a></li></ul></BODY></HTML>" > /usr/local/apache2/htdocs/index.html
+RUN cd /usr/local/apache2/htdocs && \
+    git clone --depth=1 $AW_GIT $AW_DIR && \
+    cd $AW_DIR && \
+    mkdir src && \
+    vcs import src < autoware.repos && \
+    gtags && \
+    htags --suggest2 -t "$AW_TITLE"
+
+RUN echo "<HTML><BODY>\
+<ul>\
+<li><a href=$AW_DIR/HTML>$AW_TITLE</a></li>\
+<li><a href=$RCLCPP_DIR/HTML>$RCLCPP_TITLE</a></li>\
+<li><a href=$CYCLONE_DIR/HTML>$CYCLONE_TITLE</a></li>\
+</ul>\
+</BODY></HTML>" > /usr/local/apache2/htdocs/index.html
 
