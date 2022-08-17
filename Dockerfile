@@ -4,6 +4,10 @@ ARG AW_TITLE="Autoware"
 ARG AW_GIT=https://github.com/autowarefoundation/autoware.git
 ARG AW_DIR=autoware
 
+ARG RCLC_TITLE="rclc - Galactic"
+ARG RCLC_GIT=https://github.com/ros2/rclc.git -b galactic
+ARG RCLC_DIR=rclc
+
 ARG RCLCPP_TITLE="rclcpp - Galactic"
 ARG RCLCPP_GIT=https://github.com/ros2/rclcpp.git -b galactic
 ARG RCLCPP_DIR=rclcpp
@@ -43,6 +47,12 @@ RUN cd /usr/local/apache2/htdocs && \
     htags --suggest2 -t "$RCLCPP_TITLE"
 
 RUN cd /usr/local/apache2/htdocs && \
+    git clone --depth=1 $RCLC_GIT $RCLC_DIR && \
+    cd $RCLC_DIR && \
+    gtags && \
+    htags --suggest2 -t "$RCLC_TITLE"
+
+RUN cd /usr/local/apache2/htdocs && \
     git clone --depth=1 $CYCLONE_GIT $CYCLONE_DIR && \
     cd $CYCLONE_DIR && \
     gtags && \
@@ -59,6 +69,7 @@ RUN cd /usr/local/apache2/htdocs && \
 RUN echo "<HTML><BODY>\
 <ul>\
 <li><a href=$AW_DIR/HTML>$AW_TITLE</a></li>\
+<li><a href=$RCLC_DIR/HTML>$RCLC_TITLE</a></li>\
 <li><a href=$RCLCPP_DIR/HTML>$RCLCPP_TITLE</a></li>\
 <li><a href=$CYCLONE_DIR/HTML>$CYCLONE_TITLE</a></li>\
 </ul>\
