@@ -21,7 +21,7 @@ ARG CYCLONE_GIT=https://github.com/ros2/rmw_cyclonedds.git -b galactic
 ARG CYCLONE_DIR=cyclonedds
 
 ARG FASTDDS_TITLE="FastDDS - Humble"
-ARG FASTDDS_GIT=https://github.com/ros2/rmw_cyclonedds.git -b humble
+ARG FASTDDS_GIT=https://github.com/ros2/rmw_fastrtps.git -b humble
 ARG FASTDDS_DIR=fastdds
 
 RUN sed -i 's/deb\.debian\.org\/debian /ftp\.jaist\.ac\.jp\/pub\/Linux\/debian /g' /etc/apt/sources.list
