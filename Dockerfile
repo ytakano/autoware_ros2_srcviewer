@@ -20,6 +20,10 @@ ARG CYCLONE_TITLE="CycloneDDS - Galactic"
 ARG CYCLONE_GIT=https://github.com/ros2/rmw_cyclonedds.git -b galactic
 ARG CYCLONE_DIR=cyclonedds
 
+ARG FASTDDS_TITLE="FastDDS - Humble"
+ARG FASTDDS_GIT=https://github.com/ros2/rmw_cyclonedds.git -b humble
+ARG FASTDDS_DIR=fastdds
+
 RUN sed -i 's/deb\.debian\.org\/debian /ftp\.jaist\.ac\.jp\/pub\/Linux\/debian /g' /etc/apt/sources.list
 
 RUN apt-get -y update && \
@@ -76,6 +80,12 @@ RUN cd /usr/local/apache2/htdocs && \
     gtags && \
     htags --suggest2 -t "$AW_TITLE"
 
+RUN cd /usr/local/apache2/htdocs && \
+    git clone --depth=1 $FASTDDS_GIT $FASTDDS_DIR && \
+    cd $FASTDDS_DIR && \
+    gtags && \
+    htags --suggest2 -t "$FASTDDS_TITLE"
+
 RUN echo "<HTML><BODY>\
 <ul>\
 <li><a href=$AW_DIR/HTML>$AW_TITLE</a></li>\
@@ -83,6 +93,7 @@ RUN echo "<HTML><BODY>\
 <li><a href=$RCLC_DIR/HTML>$RCLC_TITLE</a></li>\
 <li><a href=$RCLCPP_DIR/HTML>$RCLCPP_TITLE</a></li>\
 <li><a href=$CYCLONE_DIR/HTML>$CYCLONE_TITLE</a></li>\
+<li><a href=$FASTDDS_DIR/HTML>$FASTDDS_TITLE</a></li>\
 </ul>\
 </BODY></HTML>" > /usr/local/apache2/htdocs/index.html
 
